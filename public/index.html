@@ -22,6 +22,11 @@
             width: 100%;
             box-sizing: border-box;
         }
+        select {
+            appearance: auto; /* Ensure native dropdown styling */
+            position: relative;
+            z-index: 1; /* Keep dropdown above other elements */
+        }
         button {
             cursor: pointer;
         }
@@ -80,7 +85,7 @@
             })
             .catch(err => {
                 document.getElementById('buttons').innerHTML = '<p>Error loading calendars.</p>';
-                console.error(err);
+                console.error('Failed to load calendars.json:', err);
             });
 
         function updateButtons() {
@@ -101,18 +106,19 @@
             `;
             // Generate QR with fallback
             const canvas = document.getElementById('qr-canvas');
+            const qrSection = document.getElementById('qr-section');
             if (typeof QRCode !== 'undefined') {
                 QRCode.toCanvas(canvas, icsUrl, { width: 200, margin: 1 }, (error) => {
                     if (error) {
                         console.error('QR Code generation failed:', error);
-                        canvas.style.display = 'none';
+                        qrSection.innerHTML = '<p>Unable to generate QR code. Use the subscription link instead.</p>';
                     } else {
                         canvas.style.display = 'block';
                     }
                 });
             } else {
                 console.warn('QRCode library not loaded; QR code will not display.');
-                canvas.style.display = 'none';
+                qrSection.innerHTML = '<p>Unable to generate QR code. Use the subscription link instead.</p>';
             }
         }
 
@@ -122,6 +128,8 @@
                 const original = btn.textContent;
                 btn.textContent = 'Copied!';
                 setTimeout(() => { btn.textContent = original; }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
             });
         }
     </script>
