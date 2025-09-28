@@ -15,10 +15,12 @@
         }
         select, button {
             padding: 0.5em 1em;
-            margin: 0.25em;
+            margin: 0.25em 0;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
         }
         button {
             cursor: pointer;
@@ -104,6 +106,8 @@
                     if (error) {
                         console.error('QR Code generation failed:', error);
                         canvas.style.display = 'none';
+                    } else {
+                        canvas.style.display = 'block';
                     }
                 });
             } else {
